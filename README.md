@@ -42,48 +42,46 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 - Definir del backlog considerando las principales tareas.
 - Considerar un marco de trabajo Scrum, con Sprint de 2 semanas.
 - Considerar un equipo formado por 2 Backend, 2 Frontend, 1 FullStack, 2 QA, 1 UX, 1 UI, 1 Scrum Master, 1 Product Owner y tu como LT.
-- Considerar que existen areas de soporte en TI como: Arquitectura, Base de datos, Seguridad, Plataforma, las cuales tiene papel importantes en todo el proceso de desarrollo. (Ejemplo: Aprobación de la arquitectura, aprovisionamiento, despliegues, etc.)
-- Considerar un proceso de desarrollo adecuado, considerando los entornos: DEV -> QA -> Staging -> Production
+- Considerar que existen areas de soporte en TI como: Arquitectura, Base de datos, Seguridad, Plataforma, las cuales cumplen un papel importantes en todo el proceso de desarrollo. Ejemplo: Ajustes y Aprobación de la arquitecturas, aprovisionamiento de recursos On Premise y Nube, Administración del Firewall y politicas de seguridad, despliegues On Premise y Nube con flujos automatizados (Terraform, etc), otros.
+- Considerar seguir proceso de desarrollo adecuado, considerando los entornos: DEV -> QA -> Staging -> Production, y la generación de los documentos técnicos y funcionales que se requieren elaborar.
 - Considerar que se busca salir con una primera versión del sistema en un plazo de 6 meses.
 
 ### Hacer el desarrollo de un MVP inicial del proyecto:
-- Se desarrollará **2 APIs .NET** que se comuniquen **asíncronamente por colas** (message broker) y persistan en **SQL Server o PostgreSQL**, más una **pantalla React mínima** para registrar un evento.
-- Para el MVP técnico del reto, el objetivo es validar si el postulante puede diseñar y construir una solución **con arquitectura sólida**, **event-driven** y con un **frontend básico**.
+- Se desarrollará **2 APIs .NET** que se comuniquen **asíncronamente con colas** (message broker) y persistan los datos en **SQL Server o PostgreSQL**, más una **pantalla React mínima** para registrar un evento.
+- Para el MVP técnico del reto, el objetivo es validar si el postulante puede diseñar y construir una solución **con arquitectura limpia & DDD**, **event-driven** y con un **frontend básico**.
 
 ---
 
-## ⏰ 3) Indicaciones del reto
-
-- Duración: 2 días.
-- Formato de entrega: Repositorio en GitHub
-
----
-
-## 🛠️ 4) Stack requerido & Herramientas y programas
+## 🛠️ 3) Stack requerido & Herramientas y programas
 
 ### Herramientas y programas
-- Diagrama: Draw IO | Mermaid | Excalidraw
-- IDE: Visual Studio | Visual Studio Code
-- IDE BD: SSMS | pgAdmin | dbeaver
-- Gestión de contenedores: Docker Desktop o Podman Desktop
+- Diagramas: `Draw IO | Mermaid | Excalidraw`
+- IDE: `Visual Studio | Visual Studio Code | Rider`
+- IDE BD: `SSMS | pgAdmin | dbeaver | Mongo Atlas`
+- Gestión de contenedores: `Docker Desktop o Podman Desktop`
 
 ### Stack Backend
-- .NET 9 o 10
+- Framework .NET 9 o 10
+- Librerias NET de apoyo: EF, MassTransit, Mediatr, AutoMapper, FluentValidation, Polly, Mailkit, etc.
 - Comunicación asíncrona: **RabbitMQ** o **SQS | SNS de AWS**
 - Persistencia SQL: **SQL Server o PostgreSQL** (elige 1).
 - Persistencia No SQL: **Mongo DB | Dynamo DB | Otros**
+- Persistencia temporal: `Redis Cache` o `ElastiCache` de AWS.
 
 ### Stakc Frontend
 - React 18+ y/o Next.js (TypeScript recomendado)
 - Estilos con Tailwind CSS, CSS o Styled Components
-- Formulario básico para registrar un evento.
 
 ### Infra local
-- `docker-compose` para levantar: `api-event`, `api-notifications`, `db`, `rabbitmq`.
+- `docker-compose` o `podman compose` para levantar: `api-event`, `api-notifications`, `db(s)`, `rabbitmq`.
+
+### Infra en Nube AWS
+- Cuenta de capa gratuita en AWS para la administración de los servicios:
+`Lambda`, `SQS`, `Fargate`, `Dynamo DB`, `RDS`, `S3`, etc.
 
 ---
 
-## 🧪 5) Sobre el MVP (2 APIs)
+## 🧪 4) Sobre el MVP (2 APIs)
 
 ### API 1 — `EventService`
 **Responsable de:**
@@ -101,6 +99,7 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
    - Publica mensaje `EventCreated` en cola (asíncrono).
 2. **Listar Eventos**
    - Endpoint: `GET /events`
+   - Incluir almanecamiento en cache con Redis
 3. (Opcional) Obtener detalle
    - `GET /events/{id}`
 
@@ -108,7 +107,7 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 **Responsable de:**
 - Consumir mensajes del broker cuando se cree y publique un evento.
 - Persistir un registro de la notificación en su propia DB (o su propio esquema) 
-- Envío una notificación por correo.
+- Envío una notificación por correo usando Mailkit.
 
 **Ejemplo:**
 - `EventCreated` → genera `AuditLog` o `NotificationJob`.
@@ -124,7 +123,7 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 
 ---
 
-## ➡️ 6) Requisitos de mensajería (obligatorio)
+## ➡️ 5) Requisitos de mensajería (obligatorio)
 1. **Cola/evento**
    - Tipo de mensaje mínimo:
      ```json
@@ -145,16 +144,17 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
    - Si no se puede procesar tras N reintentos, mover a cola de muertos o registrar estado “Failed”.
 
 ---
-## 🗄️ 7) Requisitos de Persistencia (obligatorio)
+## 🗄️ 6) Requisitos de Persistencia (obligatorio)
 - Cada API debe persistir datos en su DB.
 - Se permite:
   - **Una DB con schemas separados** (rápido para el reto), o
   - **DB por servicio** (ideal, recomendado).
+- Se sugiere utiliza ORM como EF, para la capa de persistencia.
 - Debe haber scripts de inicialización:
   - `db/init.sql` (o migraciones) para tablas mínimas.
 
 ---
-## 🔒 8) Requisitos de seguridad (opcional bonus)
+## 🔒 7) Requisitos de seguridad (opcional bonus)
 1. **Autenticación JWT**
    - Puede ser JWT “local” (issuer propio) o integración con un IdP (si lo dominas y lo justificas).
 2. **Autorización por roles**
@@ -171,7 +171,7 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 
 ---
 
-## 🌐 9) Sobre el Frontend (React) — pantalla mínima
+## 🌐 8) Sobre el Frontend (React) — pantalla mínima
 ### Pantalla: “Registrar Evento”
 - Formulario:
   - Nombre del evento
@@ -184,6 +184,15 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 **Criterios:**
 - Validación mínima (campos obligatorios, capacidad > 0, precio >= 0).
 - Manejo de loading / error.
+
+---
+
+## ⏰ 9) Indicaciones del reto
+
+- Duración: 2 días.
+- Formato de entrega: Repositorio en GitHub o GitLab.
+- Se debe incluir los archivos `Docker Compose` o `Podman Compose`, para el levantatamiento del los recursos.
+- Se deben incluir los archivos `Dockerfile` para cada API segun corresponda.
 
 ---
 
@@ -202,8 +211,10 @@ Entregar un diagrama en `docs/architecture.md` o `docs/architectura.drawio` (o l
 
 ### C) Código fuente del Backend y Frontend
 - Se debe incluir los archivos **README** con las instrucciones para ejecutar el proyecto.
+- Se debe incluir los `scripts` de BD para la creación del módelo de datos y para inicialiar datos, en caso de usar EF, en el `README` indicar las intrucciones de migración y carga de datos iniciales(Seek).
+- Archivos `Dockerfile` y `Docker Compose` o `Podman Compose`.
 
-**Todo los entregables deben subirse a un repositorio en GitHub**
+**Todo los entregables deben subirse a un repositorio en GitHub | GitLab o BitBucket**
 
 ---
 
