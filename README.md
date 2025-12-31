@@ -32,22 +32,22 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 ## 🚀 2) Objetivo del reto
 ### Diseñar la arquitectura completa del sistema con las siguientes consideraciones:
 - Diseño basado en microservicios y eventos con Broker de mensajería.
-- Comunicación asincrona y sincrona entre los microservicios de acuerdo al caso de uso.
-- Proponer los motores de BD SQL y NoSQL segun cada microservicio.
-- Considerar  Autentificación y Autorización con estandares como JWT y OAuth 2.0.
+- Comunicación asincrona y sincrona entre los microservicios de acuerdo a cada caso de uso.
+- Proponer los motores de BD SQL y NoSQL segun cada microservicio y el tipo de uso que tendra.
+- Considerar autentificación y autorización con JWT y estandares como OIDC y OAuth 2.0.
 - Considerar un diseño de arquitectura en Nube AWS o Híbrido.
-- Considerar patrones de resiliencia.
+- Considerar patrones de resiliencia y alta concurrencia.
 
 ### Elaborar un backlog y el plan de trabajo general (ROADMAP) con las siguientes consideraciones:
 - Definir del backlog considerando las principales tareas.
 - Considerar un marco de trabajo Scrum, con Sprint de 2 semanas.
-- Considerar un equipo formado por 2 Backend, 2 Frontend, 1 FullStack, 2 QA, 1 UX, 1 UI, 1 Scrum Master, 1 Product Owner y tu como LT.
+- Considerar un equipo formado por 2 Backend, 2 Frontend, 1 FullStack, 2 QA, 1 UX, 1 UI, 1 Scrum Master, 1 Product Owner y tú como LT.
 - Considerar que existen areas de soporte en TI como: Arquitectura, Base de datos, Seguridad, Plataforma, las cuales cumplen un papel importantes en todo el proceso de desarrollo. Ejemplo: Ajustes y Aprobación de la arquitecturas, aprovisionamiento de recursos On Premise y Nube, Administración del Firewall y politicas de seguridad, despliegues On Premise y Nube con flujos automatizados (Terraform, etc), otros.
 - Considerar seguir proceso de desarrollo adecuado, considerando los entornos: DEV -> QA -> Staging -> Production, y la generación de los documentos técnicos y funcionales que se requieren elaborar.
 - Considerar que se busca salir con una primera versión del sistema en un plazo de 6 meses.
 
 ### Hacer el desarrollo de un MVP inicial del proyecto:
-- Se desarrollará **2 APIs .NET** que se comuniquen **asíncronamente con colas** (message broker) y persistan los datos en **SQL Server o PostgreSQL**, más una **pantalla React mínima** para registrar un evento.
+- Se desarrollará **2 APIs .NET** que se comuniquen **asíncronamente con colas** (message broker) y persistan los datos en BD SQL o No SQL como **SQL Server o PostgreSQL**, más una **pantalla React mínima** para registrar un evento.
 - Para el MVP técnico del reto, el objetivo es validar si el postulante puede diseñar y construir una solución **con arquitectura limpia & DDD**, **event-driven** y con un **frontend básico**.
 
 ---
