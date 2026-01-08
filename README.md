@@ -63,7 +63,7 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 ### Stack Backend
 - Framework .NET 9 o 10
 - Librerias NET de apoyo: EF, MassTransit, Mediatr, AutoMapper, FluentValidation, Polly, Mailkit, etc.
-- Comunicación asíncrona: **RabbitMQ** o **SQS | SNS de AWS**
+- Comunicación asíncrona: **RabbitMQ** | **SQS | SNS de AWS** | **Otros**.
 - Persistencia SQL: **SQL Server o PostgreSQL** (elige 1).
 - Persistencia No SQL: **Mongo DB | Dynamo DB | Otros**
 - Persistencia temporal: `Redis Cache` o `ElastiCache` de AWS.
@@ -107,7 +107,7 @@ Tu organización está construyendo una **Plataforma de Eventos Online** para ge
 **Responsable de:**
 - Consumir mensajes del broker cuando se cree y publique un evento.
 - Persistir un registro de la notificación en su propia DB (o su propio esquema) 
-- Envío una notificación por correo usando Mailkit.
+- Envío una notificación por correo usando Mailkit u otras librerias.
 
 **Ejemplo:**
 - `EventCreated` → genera `AuditLog` o `NotificationJob`.
